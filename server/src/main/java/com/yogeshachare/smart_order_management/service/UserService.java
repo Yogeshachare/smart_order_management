@@ -13,6 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User saveUser(User user){
+        user.setRole("USER");
         return userRepository.save(user);
     }
 
