@@ -23,4 +23,16 @@ public class UserController {
                 .body("User registered successfully");
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestParam String email,
+            @RequestParam String password) {
+        Boolean isAuthenticated = userService.loginUser(email, password);
+        if (isAuthenticated) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid email or password");
+        }
+    }
+
 }
