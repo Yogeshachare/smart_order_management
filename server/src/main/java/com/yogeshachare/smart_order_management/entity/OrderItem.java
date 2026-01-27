@@ -2,6 +2,7 @@ package com.yogeshachare.smart_order_management.entity;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +35,9 @@ public class OrderItem {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
+    @Column(nullable = false)
     private Integer quantity;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 }

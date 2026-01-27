@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -30,27 +28,9 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         return userRepository.save(user);
-    }
-
-    public Boolean loginUser(String email, String password) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be null or empty");
-        }
-
-        if (password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
-        }
-
-        User user = findByEmail(email);
-
-        if (user == null) {
-            throw new UserDoesNotExisitException("User does not exist with email: " + email);
-        }
-
-        return passwordEncoder.matches(password, user.getPassword());
     }
 
     public User findByEmail(String email) {
