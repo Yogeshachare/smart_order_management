@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.yogeshachare.smart_order_management.dto.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -48,10 +49,8 @@ public class OrderEntity {
     @Column(nullable = false)
     private OrderStatus status;
 
-    @Column(nullable = false)
-    private Double totalPrice;
-
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<OrderItem> orderItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -67,6 +66,7 @@ public class OrderEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
 

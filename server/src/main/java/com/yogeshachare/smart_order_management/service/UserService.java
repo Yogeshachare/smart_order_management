@@ -1,5 +1,6 @@
 package com.yogeshachare.smart_order_management.service;
 
+import com.yogeshachare.smart_order_management.dto.CustomUserDetails;
 import com.yogeshachare.smart_order_management.dto.UserRegistrationDto;
 import com.yogeshachare.smart_order_management.entity.User;
 import com.yogeshachare.smart_order_management.exception.UserAlreadyExistsException;
@@ -7,6 +8,8 @@ import com.yogeshachare.smart_order_management.exception.UserDoesNotExisitExcept
 import com.yogeshachare.smart_order_management.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
@@ -35,5 +38,19 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User getLoggedInUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null ||
+                authentication.getPrincipal().equals("anonymousUser")) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        return userDetails.getUser();
     }
 }
