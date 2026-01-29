@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yogeshachare.smart_order_management.dto.OrderResponseDto;
 import com.yogeshachare.smart_order_management.entity.OrderEntity;
 import com.yogeshachare.smart_order_management.entity.User;
+import com.yogeshachare.smart_order_management.mapper.OrderMapper;
 import com.yogeshachare.smart_order_management.service.OrderService;
 import com.yogeshachare.smart_order_management.service.UserService;
 
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
+    private final OrderMapper orderMapper;
 
     @PostMapping
     public ResponseEntity<OrderEntity> createOrder() {
@@ -35,14 +38,15 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/items/{itemId}")
-    public ResponseEntity<OrderEntity> addItemToOrder(@PathVariable Long orderId,
+    public ResponseEntity<Object> addItemToOrder(@PathVariable Long orderId,
             @PathVariable Long itemId,
             @RequestParam Integer quantity) {
         OrderEntity order = orderService.addItemToOrder(orderId, itemId, quantity);
+        OrderResponseDto orderDto = orderMapper.toOrderResponseDto(order);
         if (order == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Unable to add item to order\"}");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(order);
+        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
     }
 
     @PutMapping("/{orderId}/cancel")

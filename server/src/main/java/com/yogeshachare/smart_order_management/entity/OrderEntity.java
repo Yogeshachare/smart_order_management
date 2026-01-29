@@ -50,7 +50,7 @@ public class OrderEntity {
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    // @JsonManagedReference
     private List<OrderItem> orderItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
