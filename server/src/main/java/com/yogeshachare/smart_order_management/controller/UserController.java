@@ -35,13 +35,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDto dto) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         dto.getEmail(),
                         dto.getPassword()));
 
-        // Later → generate JWT here
         return ResponseEntity.ok("Login successful");
     }
 }
