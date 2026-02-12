@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { login } from "../api/authApi";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      await login(email, password);
+      const response = await login(email, password);
       toast.success("Login successful");
+      console.log("response:", response.data);
       // localStorage.setItem("token", response.data.token);
-      // navigate("/dashboard");
+      navigate("/");
     } catch (error: any) {
       if (error.response) {
         // Backend responded with error status
